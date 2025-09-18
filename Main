@@ -28,38 +28,30 @@ local routes = {}
 -- ============================================================
 -- ROUTE EXAMPLE (isi CFrame)
 -- ============================================================
-local CP0to1 = {
-    CFrame.new(0, 5, 0),
-    CFrame.new(20, 5, 0),
-    CFrame.new(40, 5, 0),
-}
-local CP1to2 = {
-    CFrame.new(40, 5, 0),
-    CFrame.new(60, 5, 20),
-    CFrame.new(80, 5, 40),
-}
-local CP2to3 = {
-    CFrame.new(80, 5, 40),
-    CFrame.new(100, 5, 60),
-    CFrame.new(120, 5, 80),
-}
-local CP3to4 = {
-    CFrame.new(120, 5, 80),
-    CFrame.new(140, 5, 100),
-    CFrame.new(160, 5, 120),
-}
-local CP4to5 = {
-    CFrame.new(160, 5, 120),
-    CFrame.new(180, 5, 140),
-    CFrame.new(200, 5, 160),
-}
+local function loadRoute(url)
+    local ok, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if ok and type(result) == "table" then
+        return result
+    else
+        warn("Gagal load route dari: "..url)
+        return {}
+    end
+end
 
+-- daftar link raw route (ubah ke link punyamu)
 routes = {
-    {"CP0 → CP1", CP0to1},
-    {"CP1 → CP2", CP1to2},
-    {"CP2 → CP3", CP2to3},
-    {"CP3 → CP4", CP3to4},
-    {"CP4 → CP5", CP4to5},
+    {"BASE → CP2", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/12.lua")},
+    {"CP2 → CP3", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/23.lua")},
+    {"CP3 → CP4", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/34.lua")},
+    {"CP4 → CP5", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/45.lua")},
+    {"CP5 → CP6", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/56.lua")},
+    {"CP6 → CP7", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/67.lua")},
+    {"CP7 → CP8", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/78.lua")},
+    {"CP8 → CP9", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/89.lua")},
+    {"CP9 → CP10", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/910.lua")},
+    {"CP10 → CP11", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1011.lua")},
 }
 
 -- ============================================================
