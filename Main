@@ -52,6 +52,22 @@ routes = {
     {"CP8 → CP9", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/89.lua")},
     {"CP9 → CP10", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/910.lua")},
     {"CP10 → CP11", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1011.lua")},
+    {"CP11 → CP12", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1112.lua")},
+    {"CP12 → CP13", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1213.lua")},
+    {"CP13 → CP14", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1314.lua")},
+    {"CP14 → CP15", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1415.lua")},
+    {"CP15 → CP16", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1516.lua")},
+    {"CP16 → CP17", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1617.lua")},
+    {"CP17 → CP18", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1718.lua")},
+    {"CP18 → CP19", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1819.lua")},
+    {"CP19 → CP20", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1920.lua")},
+    {"CP20 → CP21", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2021.lua")},
+    {"CP21 → CP22", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2122.lua")},
+    {"CP22 → CP23", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2223.lua")},
+    {"CP23 → CP24", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2324.lua")},
+    {"CP24 → CP25", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2425.lua")},
+    {"CP25 → CP26", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2526.lua")},
+    {"CP26 → SUMMIT", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2627.lua")},
 }
 
 -- ============================================================
