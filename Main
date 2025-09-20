@@ -51,6 +51,22 @@ local function adjustRoute(frames)
     return adjusted
 end
 
+-- ============================================================
+-- ROUTE EXAMPLE (isi CFrame)
+-- ============================================================
+local function loadRoute(url)
+    local ok, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if ok and type(result) == "table" then
+        -- auto adjust langsung disini
+        return adjustRoute(result)
+    else
+        warn("Gagal load route dari: "..url)
+        return {}
+    end
+end
+
 -- daftar link raw route (ubah ke link punyamu)
 routes = {
     {"BASE → CP2", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/12.lua")},
@@ -80,6 +96,7 @@ routes = {
     {"CP25 → CP26", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2526.lua")},
     {"CP26 → SUMMIT", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2627.lua")},
 }
+
 
 -- ============================================================
 -- Fungsi bantu & core logic
