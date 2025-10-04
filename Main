@@ -29,7 +29,8 @@ local routes = {}
 -- ROUTE EXAMPLE (isi CFrame)
 -- ============================================================
 -- Tinggi default waktu record
-local DEFAULT_HEIGHT = 2.900038719177246
+local DEFAULT_HEIGHT = 2.900038719177
+-- 4.882498383522034 
 
 -- Ambil tinggi avatar sekarang
 local function getCurrentHeight()
@@ -54,13 +55,54 @@ end
 -- ============================================================
 -- ROUTE EXAMPLE (isi CFrame)
 -- ============================================================
+local intervalFlip = false -- toggle interval rotation
+
+-- ============================================================
+-- Hapus frame duplikat
+-- ============================================================
+local function removeDuplicateFrames(frames, tolerance)
+    tolerance = tolerance or 0.01 -- toleransi kecil
+    if #frames < 2 then return frames end
+    local newFrames = {frames[1]}
+    for i = 2, #frames do
+        local prev = frames[i-1]
+        local curr = frames[i]
+        local prevPos, currPos = prev.Position, curr.Position
+        local prevRot, currRot = prev - prev.Position, curr - curr.Position
+
+        local posDiff = (prevPos - currPos).Magnitude
+        local rotDiff = (prevRot.Position - currRot.Position).Magnitude -- rot diff sederhana
+
+        if posDiff > tolerance or rotDiff > tolerance then
+            table.insert(newFrames, curr)
+        end
+    end
+    return newFrames
+end
+-- ============================================================
+-- Apply interval flip
+-- ============================================================
+local function applyIntervalRotation(cf)
+    if intervalFlip then
+        local pos = cf.Position
+        local rot = cf - pos
+        local newRot = CFrame.Angles(0, math.pi, 0) * rot
+        return CFrame.new(pos) * newRot
+    else
+        return cf
+    end
+end
+
+-- ============================================================
+-- Load route dengan auto adjust + hapus duplikat
+-- ============================================================
 local function loadRoute(url)
     local ok, result = pcall(function()
         return loadstring(game:HttpGet(url))()
     end)
     if ok and type(result) == "table" then
-        -- auto adjust langsung disini
-        return adjustRoute(result)
+        local cleaned = removeDuplicateFrames(result, 0.01) -- tambahkan tolerance
+        return adjustRoute(cleaned)
     else
         warn("Gagal load route dari: "..url)
         return {}
@@ -69,34 +111,8 @@ end
 
 -- daftar link raw route (ubah ke link punyamu)
 routes = {
-    {"BASE → CP2", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/12.lua")},
-    {"CP2 → CP3", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/23.lua")},
-    {"CP3 → CP4", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/34.lua")},
-    {"CP4 → CP5", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/45.lua")},
-    {"CP5 → CP6", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/56.lua")},
-    {"CP6 → CP7", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/67.lua")},
-    {"CP7 → CP8", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/78.lua")},
-    {"CP8 → CP9", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/89.lua")},
-    {"CP9 → CP10", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/910.lua")},
-    {"CP10 → CP11", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1011.lua")},
-    {"CP11 → CP12", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1112.lua")},
-    {"CP12 → CP13", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1213.lua")},
-    {"CP13 → CP14", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1314.lua")},
-    {"CP14 → CP15", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1415.lua")},
-    {"CP15 → CP16", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1516.lua")},
-    {"CP16 → CP17", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1617.lua")},
-    {"CP17 → CP18", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1718.lua")},
-    {"CP18 → CP19", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1819.lua")},
-    {"CP19 → CP20", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/1920.lua")},
-    {"CP20 → CP21", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2021.lua")},
-    {"CP21 → CP22", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2122.lua")},
-    {"CP22 → CP23", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2223.lua")},
-    {"CP23 → CP24", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2324.lua")},
-    {"CP24 → CP25", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2425.lua")},
-    {"CP25 → CP26", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2526.lua")},
-    {"CP26 → SUMMIT", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/2627.lua")},
+    {"BASE → CP8", loadRoute("https://raw.githubusercontent.com/Bardenss/ATIN/refs/heads/main/12.lua")},
 }
-
 
 -- ============================================================
 -- Fungsi bantu & core logic
@@ -144,7 +160,13 @@ local function getNearestFrameIndex(frames)
     return startIdx
 end
 
+-- ============================================================
+-- Modifikasi lerpCF untuk interval flip
+-- ============================================================
 local function lerpCF(fromCF, toCF)
+    fromCF = applyIntervalRotation(fromCF)
+    toCF = applyIntervalRotation(toCF)
+
     local duration = frameTime / math.max(0.05, playbackRate)
     local t = 0
     while t < duration do
@@ -157,6 +179,7 @@ local function lerpCF(fromCF, toCF)
         end
     end
 end
+
 
 -- notify placeholder
 local notify = function() end
@@ -402,7 +425,7 @@ local InfoTab = Window:Tab({
 -- Main Tab (Dropdown speed mulai dari 0.25x)
 -- ============================================================
 local speeds = {}
-for v = 0.25, 100, 0.25 do
+for v = 0.25, 3, 0.25 do
     table.insert(speeds, string.format("%.2fx", v))
 end
 MainTab:Dropdown({
@@ -418,6 +441,16 @@ MainTab:Dropdown({
         else
             notify("Playback Speed", "Gagal membaca opsi speed!", 3)
         end
+    end
+})
+MainTab:Toggle({
+    Title = "Interval Flip",
+    Icon = "lucide:refresh-ccw",
+    Desc = "ON → Hadap belakang tiap frame",
+    Value = false,
+    Callback = function(state)
+        intervalFlip = state
+        notify("Interval Flip", state and "✅ Aktif" or "❌ Nonaktif", 2)
     end
 })
 
